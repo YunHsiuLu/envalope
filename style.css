@@ -69,18 +69,15 @@ body, html {
     bottom: 0px; 
     left: 5%;
     width: 90%;
-    height: 85%; 
+    height: 60%; 
     background-color: var(--paper-color);
     z-index: 5; 
     border-radius: 4px;
     transition: transform 1s cubic-bezier(0.6, -0.28, 0.735, 0.045); 
-    
-    /* [修改點 1] 確保內容絕對不會跑出圓角外，解決圖片看起來過大的感覺 */
     overflow: hidden;
     box-shadow: 0 -1px 5px rgba(0,0,0,0.05);
 }
 
-/* [修改點 2] 封面層 (test2.png) 設定 */
 .letter-cover {
     position: absolute;
     top: 0;
