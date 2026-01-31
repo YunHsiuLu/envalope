@@ -42,16 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
             letter.style.transition = 'all 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
             
             requestAnimationFrame(() => {
+                // 偵測是否為手機尺寸 (寬度小於 600px)
+                const isMobile = window.innerWidth < 600;
+
                 letter.style.top = '50%';
                 letter.style.left = '50%';
-                letter.style.width = '80vw';     
+                
+                // ★ 修改 [問題 2]：手機版寬度給到 92vw，電腦版維持 80vw
+                letter.style.width = isMobile ? '92vw' : '80vw'; 
+                
                 letter.style.maxWidth = '800px'; 
-                letter.style.height = '85vh';
+                
+                // ★ 修改：高度也可以稍微調整，避免手機版上下留白太多
+                letter.style.height = isMobile ? '85vh' : '85vh'; 
+                
                 letter.style.transform = 'translate(-50%, -50%)';
                 letter.style.borderRadius = '10px';
                 
                 // [關鍵] 加入 full-mode Class
-                // CSS 會自動處理：cover (test2) 淡出 -> content (test1) 淡入
                 letter.classList.add('full-mode');
             });
 
