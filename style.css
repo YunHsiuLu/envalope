@@ -5,7 +5,6 @@
     --red-flap: #c62828;       
     --gold: #fbc02d;           
     --paper-color: #fffaf0;    
-    
     --env-width: 320px;
     --env-height: 480px;
 }
@@ -32,8 +31,7 @@ body, html {
     align-items: center;
     perspective: 2000px;
 
-    /* 確保 3D 空間穩定 */
-    -webkit-perspective: 2000px;
+    -webkit-perspective: 2000px; /* 確保 3D 空間穩定 */
     perspective: 2000px;
     overflow: hidden; /* 防止捲軸突然出現 */
 }
@@ -81,6 +79,7 @@ body, html {
     transition: transform 1.2s ease-in-out; 
     overflow: hidden;
     box-shadow: 0 -1px 5px rgba(0,0,0,0.05);
+
     /* ★ 新增：強制開啟硬體加速與背部隱藏 */
     -webkit-backface-visibility: hidden; /* 隱藏旋轉背面，iOS 必加 */
     backface-visibility: hidden;
@@ -163,8 +162,9 @@ body, html {
     opacity: 0; /* 最終變透明 */
     pointer-events: none; /* 讓點擊穿透 */
     
-    /* ★ 修改：加上 will-change */
+    /* 修改：加上 will-change */
     will-change: opacity;
+
     /* 
        關鍵：transition-delay: 0.8s
        意思是：等到「變大動畫(0.8s)」執行完畢後，才開始執行「淡出動畫」
@@ -240,7 +240,7 @@ body, html {
     height: 35%;
     background-color: var(--red-flap);
     
-    /* ★ 關鍵修改：蓋子要在口袋前面，所以數值要比 20px 大 */
+    /* 關鍵修改：蓋子要在口袋前面，所以數值要比 20px 大 */
     transform: translate3d(0, 0, 40px); 
     z-index: 20;
     
@@ -258,7 +258,7 @@ body, html {
     position: absolute;
     top: 35%; 
     left: 50%;
-    /* ★ 關鍵修改：貼紙要貼在最最前面，所以數值要最大 */
+    /* 關鍵修改：貼紙要貼在最最前面，所以數值要最大 */
     transform: translate3d(-50%, -50%, 60px); 
     
     width: 90px;
@@ -272,7 +272,7 @@ body, html {
     z-index: 25;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: opacity 0.3s ease, transform 0.3s ease;
-}.
+}
 
 .xixi-text {
     color: var(--gold);
@@ -293,6 +293,7 @@ body, html {
 }
 
 /* 因為我們改了 flap 的預設 transform，所以 open 狀態也要確保正確 */
+
 .envelope-wrapper.open .envelope-flap {
     /* 打開時，轉到背面去 (rotateX 180deg) */
     transform: rotateX(180deg);
