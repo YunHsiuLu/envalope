@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="cover.webp">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,7 +24,7 @@
                 <!-- [新增] 封面層：抽出時顯示這張圖 (test2.png) -->
                 <div class="letter-cover">
                     <!-- 請將 src 改為您的 test2.png 路徑 -->
-                    <img src="cover.png" alt="封面圖 test2">
+                    <img src="cover.webp" alt="封面圖">
                 </div>
 
                 <!-- 原本的內文層：展開後顯示 (包含 test1.png) -->
@@ -32,7 +33,7 @@
                     
                     <div class="photo-area">
                         <!-- 請將 src 改為您的 test1.png 路徑 -->
-                        <img src="content.jpg" alt="內文婚紗照 test1">
+                        <img src="content.webp" alt="內文婚紗照" loading="lazy">
                     </div>
 
                     <div class="info">
@@ -52,7 +53,7 @@
                     <p>（位於該棟中的8樓）</p>
                     <div class="photo-area map-area">
                         <!-- 請將 src 改為您的 test1.png 路徑 -->
-                        <img src="map.png" alt="地圖照">
+                        <img src="map.webp" alt="地圖照" loading="lazy">
                     </div>
 
                     <a href="https://forms.gle/tXDWavemSxZQoVeN9" target="_blank" class="btn-rsvp">
