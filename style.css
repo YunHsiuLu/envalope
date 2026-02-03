@@ -221,14 +221,14 @@ body, html {
     width: 100%;
     height: 100%;
     background-color: var(--red-main);
+    
+    /* 原本是 1px，保持不變，或稍微加大 */
+    transform: translate3d(0, 0, 20px); /* 往前推 20px */
     z-index: 10; 
+    
     border-radius: 0 0 8px 8px;
     clip-path: polygon(0 0, 0% 100%, 100% 100%, 100% 0, 50% 35%);
     pointer-events: none;
-
-    /* ★ 新增：確保口袋永遠「物理上」蓋在信紙上面 */
-    transform: translate3d(0, 0, 1px); /* Z軸往前推 1px */
-    z-index: 50; /* 加大 z-index */
 }
 
 /* 4. 信封蓋子 */
@@ -239,10 +239,15 @@ body, html {
     width: 100%;
     height: 35%;
     background-color: var(--red-flap);
+    
+    /* ★ 關鍵修改：蓋子要在口袋前面，所以數值要比 20px 大 */
+    transform: translate3d(0, 0, 40px); 
     z-index: 20;
+    
     border-radius: 8px 8px 0 0;
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     transform-origin: top;
+    
     transition: 
         transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
         z-index 0.1s linear 0.4s; 
@@ -253,7 +258,9 @@ body, html {
     position: absolute;
     top: 35%; 
     left: 50%;
-    transform: translate(-50%, -50%);
+    /* ★ 關鍵修改：貼紙要貼在最最前面，所以數值要最大 */
+    transform: translate3d(-50%, -50%, 60px); 
+    
     width: 90px;
     height: 90px;
     background-color: var(--red-deep);
@@ -265,7 +272,7 @@ body, html {
     z-index: 25;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: opacity 0.3s ease, transform 0.3s ease;
-}
+}.
 
 .xixi-text {
     color: var(--gold);
@@ -277,12 +284,17 @@ body, html {
 
 /* === 動畫狀態 === */
 
+/* 開啟時，封口貼淡出並放大 */
 .envelope-wrapper.open .xixi-seal {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
+    /* 這裡也要加上 translate3d 保持一致性，不然動畫可能會抖一下 */
+    transform: translate3d(-50%, -50%, 60px) scale(1.5);
+    pointer-events: none; /* 避免擋到點擊 */
 }
 
+/* 因為我們改了 flap 的預設 transform，所以 open 狀態也要確保正確 */
 .envelope-wrapper.open .envelope-flap {
+    /* 打開時，轉到背面去 (rotateX 180deg) */
     transform: rotateX(180deg);
     background-color: var(--red-deep);
     z-index: -1;
@@ -306,7 +318,11 @@ body, html {
         --env-width: 280px;
         --env-height: 420px;
     }
-    .xixi-seal { width: 70px; height: 70px; }
+    .xixi-seal {
+        width: 70px;
+        height: 70px;
+        transform: translate3d(-50%, -50%, 60px);
+    }
     .xixi-text { font-size: 40px; }
     .envelope-flap { height: 30%; } 
     .xixi-seal { top: 30%; }
