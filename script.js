@@ -20,53 +20,59 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // --- 步驟 A: 鎖定位置 ---
             const rect = letter.getBoundingClientRect();
+            
+            // ★ 修改：先暫停 transition，避免瞬間瞬移被看到動畫
             letter.style.transition = 'none';
+            letter.style.webkitTransition = 'none'; // 針對 iOS Safari
 
-            // 固定位置
+            // 固定位置 (這段保持不變)
             letter.style.position = 'fixed';
             letter.style.top = `${rect.top}px`;
             letter.style.left = `${rect.left}px`;
             letter.style.width = `${rect.width}px`;
             letter.style.height = `${rect.height}px`;
-            letter.style.transform = 'none'; 
             
-            // 移到最上層並掛載到 body
+            // ★ 關鍵修改：加上 translateZ(0) 強制 GPU 接手
+            letter.style.transform = 'translate3d(0, 0, 0)'; 
+            
             letter.style.zIndex = '999';
             letter.style.margin = '0';
             document.body.appendChild(letter);
 
-            // --- 步驟 B: 重繪 ---
+            // --- 步驟 B: 強制重繪 (Reflow) ---
+            // 讀取兩次 offsetWidth 確保 iOS 真的醒過來
             void letter.offsetWidth;
-
-            // --- 步驟 C: 執行放大 ---
-            letter.style.transition = 'all 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
             
+            // ★ 小技巧：用 requestAnimationFrame 包兩層
+            // 這能確保下一幀渲染時，位置已經鎖定好了，才開始跑動畫
             requestAnimationFrame(() => {
-                // 偵測是否為手機尺寸 (寬度小於 600px)
-                const isMobile = window.innerWidth < 600;
+                requestAnimationFrame(() => {
+                    
+                    // --- 步驟 C: 執行放大 ---
+                    // 恢復 transition
+                    letter.style.transition = 'all 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                    letter.style.webkitTransition = 'all 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
 
-                letter.style.top = '50%';
-                letter.style.left = '50%';
-                
-                // ★ 修改 [問題 2]：手機版寬度給到 92vw，電腦版維持 80vw
-                letter.style.width = isMobile ? '92vw' : '80vw'; 
-                
-                letter.style.maxWidth = '800px'; 
-                
-                // ★ 修改：高度也可以稍微調整，避免手機版上下留白太多
-                letter.style.height = isMobile ? '85vh' : '85vh'; 
-                
-                letter.style.transform = 'translate(-50%, -50%)';
-                letter.style.borderRadius = '10px';
-                
-                // [關鍵] 加入 full-mode Class
-                letter.classList.add('full-mode');
+                    const isMobile = window.innerWidth < 600;
+                    
+                    letter.style.top = '50%';
+                    letter.style.left = '50%';
+                    letter.style.width = isMobile ? '92vw' : '80vw';     
+                    letter.style.maxWidth = '800px'; 
+                    letter.style.height = isMobile ? '85vh' : '85vh';
+                    
+                    // ★ 保持 3D 屬性
+                    letter.style.transform = 'translate3d(-50%, -50%, 0)';
+                    
+                    letter.style.borderRadius = '10px';
+                    letter.classList.add('full-mode');
+                });
             });
 
             // --- 步驟 D: 信封退場 ---
             envelopeWrapper.classList.add('move-down');
             document.body.style.overflow = 'auto';
 
-        }, 1800); 
+        }, 1800);
     });
 });

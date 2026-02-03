@@ -31,6 +31,11 @@ body, html {
     justify-content: center;
     align-items: center;
     perspective: 2000px;
+
+    /* 確保 3D 空間穩定 */
+    -webkit-perspective: 2000px;
+    perspective: 2000px;
+    overflow: hidden; /* 防止捲軸突然出現 */
 }
 
 /* === 信封容器 === */
@@ -76,6 +81,15 @@ body, html {
     transition: transform 1.2s ease-in-out; 
     overflow: hidden;
     box-shadow: 0 -1px 5px rgba(0,0,0,0.05);
+    /* ★ 新增：強制開啟硬體加速與背部隱藏 */
+    -webkit-backface-visibility: hidden; /* 隱藏旋轉背面，iOS 必加 */
+    backface-visibility: hidden;
+
+    /* 讓瀏覽器知道這個元素會變動，提前準備優化 */
+    will-change: transform, width, height, top, left;
+
+    /* 解決某些 iOS 版本在 3D 空間內的層級錯誤 */
+    transform: translate3d(0, 0, 0);
 }
 
 .letter-cover {
@@ -90,6 +104,11 @@ body, html {
     
     /* 這裡定義一般的過渡效果 */
     transition: opacity 0.8s ease; 
+
+    /* ★ 新增：防止內容在移動時閃爍 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
 }
 
 .letter-cover img {
@@ -124,6 +143,15 @@ body, html {
     flex-direction: column;
     align-items: center;
     scrollbar-width: none; 
+
+    /* ★ 新增：防止內容在移動時閃爍 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+
+    /* 加上這個可以防止文字在父層變形時邊緣產生鋸齒或閃爍 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 .letter-content::-webkit-scrollbar { display: none; }
 
@@ -135,6 +163,8 @@ body, html {
     opacity: 0; /* 最終變透明 */
     pointer-events: none; /* 讓點擊穿透 */
     
+    /* ★ 修改：加上 will-change */
+    will-change: opacity;
     /* 
        關鍵：transition-delay: 0.8s
        意思是：等到「變大動畫(0.8s)」執行完畢後，才開始執行「淡出動畫」
@@ -195,6 +225,10 @@ body, html {
     border-radius: 0 0 8px 8px;
     clip-path: polygon(0 0, 0% 100%, 100% 100%, 100% 0, 50% 35%);
     pointer-events: none;
+
+    /* ★ 新增：確保口袋永遠「物理上」蓋在信紙上面 */
+    transform: translate3d(0, 0, 1px); /* Z軸往前推 1px */
+    z-index: 50; /* 加大 z-index */
 }
 
 /* 4. 信封蓋子 */
