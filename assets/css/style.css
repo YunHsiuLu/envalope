@@ -1,0 +1,325 @@
+:root {
+    --bg-color: #fce4ec;       
+    --red-deep: #b71c1c;       
+    --red-main: #d32f2f;       
+    --red-flap: #c62828;       
+    --gold: #fbc02d;           
+    --paper-color: #fffaf0;    
+    --env-width: 320px;
+    --env-height: 480px;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    font-family: 'Noto Serif TC', serif;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 2000px;
+    -webkit-perspective: 2000px;
+    overflow: hidden;
+}
+
+/* === 信封容器 === */
+.envelope-wrapper {
+    position: relative;
+    width: var(--env-width);
+    height: var(--env-height);
+    cursor: pointer;
+    z-index: 10;
+    transform-style: preserve-3d;
+    transition: transform 1s ease, opacity 1s ease;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+    animation: introFadeIn 1s ease-out forwards;
+}
+
+@keyframes introFadeIn {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 1. 信封背板 */
+.envelope-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--red-deep);
+    border-radius: 8px;
+    z-index: 0;
+}
+
+/* 2. 信紙 (容器) */
+.letter {
+    position: absolute;
+    bottom: 5px; 
+    left: 5%;
+    width: 90%;
+    height: 60%; 
+    background-color: var(--paper-color);
+    z-index: 5; 
+    border-radius: 4px;
+    transition: transform 1.2s ease-in-out; 
+    overflow: hidden;
+    box-shadow: 0 -1px 5px rgba(0,0,0,0.05);
+    
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform, width, height, top, left;
+    transform: translate3d(0, 0, 0);
+}
+
+.letter-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 1;
+    background-color: var(--paper-color);
+    transition: opacity 0.8s ease; 
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+}
+
+.letter-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+}
+
+/* 內文層 */
+.letter-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 1; 
+    padding: 30px 20px;
+    box-sizing: border-box;
+    text-align: center;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scrollbar-width: none; 
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.letter-content::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* 全螢幕模式動畫 */
+.letter.full-mode .letter-cover {
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+    transition: opacity 0.8s ease 1.5s;
+}
+
+.letter-content h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--red-deep);
+    font-size: 1.8rem;
+    margin: 0 0 15px 0;
+}
+
+.photo-area {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 4;
+    background-color: #ddd;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.photo-area.map-area { 
+    aspect-ratio: 16 / 9; 
+}
+
+.photo-area img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    display: block; 
+}
+
+.info { 
+    color: #333; 
+    line-height: 1.8; 
+    margin-bottom: 30px; 
+}
+
+.invite-text { 
+    margin-bottom: 5px; 
+    color: #888; 
+}
+
+.couple-names strong { 
+    color: var(--red-deep); 
+    font-size: 1.4em; 
+}
+
+.divider { 
+    border-top: 1px dashed #ccc; 
+    margin: 20px 0; 
+    width: 100%; 
+}
+
+.footer-text { 
+    margin-top: 30px; 
+    font-size: 0.9em; 
+    color: #999; 
+}
+
+.btn-rsvp {
+    display: inline-block;
+    padding: 12px 35px;
+    background-color: var(--red-main);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    transition: 0.3s;
+}
+
+.btn-rsvp:hover { 
+    transform: translateY(-2px); 
+    background-color: var(--red-deep); 
+}
+
+/* 3. 信封口袋 */
+.envelope-pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--red-main);
+    transform: translate3d(0, 0, 20px);
+    z-index: 10; 
+    border-radius: 0 0 8px 8px;
+    clip-path: polygon(0 0, 0% 100%, 100% 100%, 100% 0, 50% 35%);
+    pointer-events: none;
+}
+
+/* 4. 信封蓋子 */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background-color: var(--red-flap);
+    transform: translate3d(0, 0, 40px); 
+    z-index: 20;
+    border-radius: 8px 8px 0 0;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.4s; 
+}
+
+/* 5. 封口貼 */
+.xixi-seal {
+    position: absolute;
+    top: 35%; 
+    left: 50%;
+    transform: translate3d(-50%, -50%, 60px); 
+    width: 90px;
+    height: 90px;
+    background-color: var(--red-deep);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 25;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.xixi-text {
+    color: var(--gold);
+    font-size: 55px;
+    font-weight: bold;
+    line-height: 1;
+    user-select: none;
+}
+
+/* === 動畫狀態 === */
+
+/* 開啟時，封口貼淡出並放大 */
+.envelope-wrapper.open .xixi-seal {
+    opacity: 0;
+    transform: translate3d(-50%, -50%, 60px) scale(1.5);
+    pointer-events: none;
+}
+
+.envelope-wrapper.open .envelope-flap {
+    transform: rotateX(180deg);
+    background-color: var(--red-deep);
+    z-index: -1;
+}
+
+/* 抽出動畫 */
+.letter.extracted {
+    transform: translateY(-280px);
+}
+
+/* 信封淡出 */
+.envelope-wrapper.move-down {
+    transform: translateY(100vh);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 手機適配 */
+@media (max-width: 480px) {
+    :root {
+        --env-width: 280px;
+        --env-height: 420px;
+    }
+    .xixi-seal {
+        width: 70px;
+        height: 70px;
+        transform: translate3d(-50%, -50%, 60px);
+    }
+    .xixi-text { 
+        font-size: 40px; 
+    }
+    .envelope-flap { 
+        height: 30%; 
+    } 
+    .xixi-seal { 
+        top: 30%; 
+    }
+}
